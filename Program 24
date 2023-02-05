@@ -1,0 +1,19 @@
+#include <stdio.h> 
+
+#define BLOCK_SIZE 8192 
+#define PTR_SIZE 4 
+#define NUM_DIRECT_BLOCKS 12 
+
+int main() 
+{ 
+    int max_file_size; 
+  
+    max_file_size = NUM_DIRECT_BLOCKS * BLOCK_SIZE; 
+    max_file_size += BLOCK_SIZE / PTR_SIZE * BLOCK_SIZE; 
+    max_file_size += BLOCK_SIZE / PTR_SIZE * BLOCK_SIZE / PTR_SIZE * BLOCK_SIZE; 
+    max_file_size += BLOCK_SIZE / PTR_SIZE * BLOCK_SIZE / PTR_SIZE * BLOCK_SIZE / PTR_SIZE * BLOCK_SIZE; 
+  
+    printf("Max file size: %d bytes\n", max_file_size); 
+  
+    return 0; 
+} 
