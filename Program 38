@@ -1,0 +1,78 @@
+#include <stdio.h>
+#include <stdlib.h>
+ 
+#define NUM_PROCESSES 3
+ 
+typedef struct {
+    int pid;
+    int burstTime;
+    int arrivalTime;
+    int waitingTime;
+    int turnaroundTime;
+} process;
+ 
+void calculateWaitTime(process processes[]) {
+    int serviceTime[NUM_PROCESSES];
+    serviceTime[0] = 0;
+    processes[0].waitingTime = 0;
+    for (int i = 1; i < NUM_PROCESSES; i++) {
+        serviceTime[i] = serviceTime[i - 1] + processes[i - 1].burstTime;
+        processes[i].waitingTime = serviceTime[i] - processes[i].arrivalTime;
+        if (processes[i].waitingTime < 0) {
+            processes[i].waitingTime = 0;
+        }
+    }
+}
+ 
+void calculateTurnaroundTime(process processes[]) {
+    for (int i = 0; i < NUM_PROCESSES; i++) {
+        processes[i].turnaroundTime = processes[i].waitingTime + processes[i].burstTime;
+    }
+}
+ 
+void sortProcesses(process processes[]) {
+    process temp;
+    for (int i = 0; i < NUM_PROCESSES - 1; i++) {
+        for (int j = i + 1; j < NUM_PROCESSES; j++) {
+            if (processes[i].burstTime > processes[j].burstTime) {
+                temp = processes[i];
+                processes[i] = processes[j];
+                processes[j] = temp;
+            }
+        }
+    }
+}
+ 
+int main() {
+    process processes[NUM_PROCESSES];
+ 
+    processes[0].pid = 0;
+    processes[0].burstTime = 2;
+    processes[0].arrivalTime = 0;
+ 
+    processes[1].pid = 1;
+    processes[1].burstTime = 4;
+    processes[1].arrivalTime = 0;
+ 
+    processes[2].pid = 2;
+    processes[2].burstTime = 8;
+    processes[2].arrivalTime = 0;
+ 
+    sortProcesses(processes);
+ 
+    calculateWaitTime(processes);
+    calculateTurnaroundTime(processes);
+ 
+    int totalWaitingTime = 0;
+    int totalTurnaroundTime = 0;
+ 
+    for (int i = 0; i < NUM_PROCESSES; i++) {
+        totalWaitingTime += processes[i].waitingTime;
+        totalTurnaroundTime += processes[i].turnaroundTime;
+    }
+ 
+    printf("Average Waiting Time: %f\n", (float) totalWaitingTime / NUM_PROCESSES);
+    printf("Average Turnaround Time: %f\n", (float) totalTurnaroundTime / NUM_PROCESSES);
+ 
+    return 0;
+}
