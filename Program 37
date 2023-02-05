@@ -1,0 +1,66 @@
+#include <stdio.h>
+#include <stdbool.h>
+#define MAX 20
+
+int frames, pages, page_faults = 0;
+int buffer[MAX];
+bool is_page_hit(int data) {
+int i;
+for (i = 0; i < frames; i++) {
+if (buffer[i] == data) {
+return true;
+}
+}
+return false;
+}
+void display() {
+int i;
+printf("\n");
+for (i = 0; i < frames; i++) {
+printf("%d\t", buffer[i]);
+}
+}
+void optimal_algo(int pages, int reference[]) {
+int i, j;
+for (i = 0; i < pages; i++) {
+if (!is_page_hit(reference[i])) {
+page_faults++;
+int farthest = -1;
+for (j = 0; j < frames; j++) {
+int k;
+for (k = i; k < pages; k++) {
+if (buffer[j] == reference[k]) {
+if (k > farthest) {
+farthest = k;
+buffer[j] = reference[i];
+}
+break;
+}
+}
+if (k == pages) {
+buffer[j] = reference[i];
+}
+}
+display();
+}
+}
+}
+
+int main() {
+int reference[MAX];
+int i;
+printf("Enter number of pages: ");
+scanf("%d", &pages);
+printf("Enter reference string: ");
+for (i = 0; i < pages; i++) {
+scanf("%d", &reference[i]);
+}
+printf("Enter number of frames: ");
+scanf("%d", &frames);
+for (i = 0; i < frames; i++) {
+buffer[i] = -1;
+}
+optimal_algo(pages, reference);
+printf("\nTotal page faults: %d\n", page_faults);
+return 0;
+}
