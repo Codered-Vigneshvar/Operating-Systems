@@ -1,0 +1,67 @@
+#include <stdio.h> 
+#include <stdlib.h> 
+#include <sys/stat.h> 
+#include <sys/types.h> 
+
+int main() 
+{ 
+    // Create top level directory 
+    int top_dir = mkdir("top_dir", 0777); 
+    if (top_dir == -1) { 
+        printf("Error: Unable to create top level directory\n"); 
+        return 1; 
+    } 
+  
+    // Create user directories 
+    int user1 = mkdir("top_dir/user1", 0777); 
+    int user2 = mkdir("top_dir/user2", 0777); 
+    int user3 = mkdir("top_dir/user3", 0777); 
+  
+    // Check for successful creation of user directories 
+    if (user1 == -1 || user2 == -1 || user3 == -1) { 
+        printf("Error: Unable to create user directories\n"); 
+        return 1; 
+    } 
+  
+    // Create files in user1 directory 
+    FILE *file1 = fopen("top_dir/user1/file1.txt", "w"); 
+    FILE *file2 = fopen("top_dir/user1/file2.txt", "w"); 
+    FILE *file3 = fopen("top_dir/user1/file3.txt", "w"); 
+  
+    // Check for successful creation of files in user1 directory 
+    if (file1 == NULL || file2 == NULL || file3 == NULL) { 
+        printf("Error: Unable to create files in user1 directory\n"); 
+        return 1; 
+    } 
+    fclose(file1); 
+    fclose(file2); 
+    fclose(file3); 
+  
+    // Create files in user2 directory 
+    file1 = fopen("top_dir/user2/file1.txt", "w"); 
+    file2 = fopen("top_dir/user2/file2.txt", "w"); 
+  
+    // Check for successful creation of files in user2 directory 
+    if (file1 == NULL || file2 == NULL) { 
+        printf("Error: Unable to create files in user2 directory\n"); 
+        return 1; 
+    } 
+    fclose(file1); 
+    fclose(file2); 
+  
+    // Create files in user3 directory 
+    file1 = fopen("top_dir/user3/file1.txt", "w"); 
+    file2 = fopen("top_dir/user3/file2.txt", "w"); 
+  
+    // Check for successful creation of files in user3 directory 
+    if (file1 == NULL || file2 == NULL) { 
+        printf("Error: Unable to create files in user3 directory\n"); 
+        return 1; 
+    } 
+    fclose(file1); 
+    fclose(file2); 
+  
+    printf("Two-level directory system successfully created\n"); 
+  
+    return 0; 
+}
